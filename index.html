@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evite o Acidente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .question {
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #ffc107;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .options button:hover {
+      background: #e0a800;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div id="game">
+    <img id="situationImage" src="" alt="Situação de trânsito">
+    <div class="question" id="questionText"></div>
+    <div class="options" id="options"></div>
+    <div id="result"></div>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      image: "https://via.placeholder.com/350x200?text=Motociclista+sem+capacete",
+      question: "O que está errado nessa cena?",
+      options: [
+        "Está tudo certo.",
+        "O motociclista deveria usar capacete.",
+        "O problema é o carro atrás."
+      ],
+      answer: 1
+    },
+    {
+      image: "https://via.placeholder.com/350x200?text=Pedestre+no+celular",
+      question: "Qual a melhor atitude para evitar acidentes ao atravessar?",
+      options: [
+        "Olhar o celular enquanto atravessa.",
+        "Aguardar o sinal e olhar para os dois lados.",
+        "Correr no meio dos carros."
+      ],
+      answer: 1
+    },
+    {
+      image: "https://via.placeholder.com/350x200?text=Ciclista+na+cal%C3%A7ada",
+      question: "Ciclistas devem andar pela calçada?",
+      options: [
+        "Sim, para evitar o trânsito.",
+        "Não, eles devem usar a ciclovia ou acostamento.",
+        "Somente se estiverem com pressa."
+      ],
+      answer: 1
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    if (current >= questions.length) {
+      endGame();
+      return;
+    }
+    const q = questions[current];
+    document.getElementById("situationImage").src = q.image;
+    document.getElementById("questionText").textContent = q.question;
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    q.options.forEach((opt, index) => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.onclick = () => {
+        if (index === q.answer) {
+          score++;
+        }
+        current++;
+        loadQuestion();
+      };
+      optionsDiv.appendChild(btn);
+    });
+  }
+
+  function endGame() {
+    const gameDiv = document.getElementById("game");
+    if (score === questions.length) {
+      gameDiv.innerHTML = `<img src="/mnt/data/ab3e6e18-1506-469a-93d5-9d8b87f80029.png" alt="Sucesso!">
+      <h2>Mobilidade Humana, Responsabilidade Humana!</h2>`;
+    } else {
+      gameDiv.innerHTML = `<h2>Você acertou ${score} de ${questions.length}!</h2>
+      <p>Revise as dicas e tente novamente para garantir um trânsito mais seguro! 🚦</p>`;
+    }
+  }
+
+  loadQuestion();
+</script>
+</body>
+</html>
